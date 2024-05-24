@@ -1,7 +1,11 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { auth } from "../../../auth";
+import Logout from "../common/Logout";
 
-const BlogHeader = () => {
+const BlogHeader = async () => {
+  const session = await auth();
+  console.log(session);
   return (
     <header>
       <nav className="container mx-auto">
@@ -29,23 +33,27 @@ const BlogHeader = () => {
                 <span>Search</span>
               </Link>
             </li>
-            <li>
-              <Link
-                href="/blog/login"
-                className="text-white/50 hover:text-white transition-all duration-200"
-              >
-                Login
-              </Link>
-            </li>
-            <li className="flex items-center">
-              <div className="avater-img bg-orange-600 text-white">
-                <span className="">S</span>
-              </div>
+            {session.user ? (
+              <li className="flex items-center">
+                <Link
+                  href={"/profile"}
+                  className="avater-img bg-orange-600 text-white"
+                >
+                  <span className="">S</span>
+                </Link>
 
-              <Link href="/profile">
-                <span className="text-white ml-2">Saad Hasan</span>
-              </Link>
-            </li>
+                <Logout />
+              </li>
+            ) : (
+              <li>
+                <Link
+                  href="/blog/login"
+                  className="text-white/50 hover:text-white transition-all duration-200"
+                >
+                  Login
+                </Link>
+              </li>
+            )}
           </ul>
         </div>
       </nav>
