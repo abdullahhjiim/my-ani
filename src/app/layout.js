@@ -11,7 +11,10 @@ export const metadata = {
   description: "Ani's Blog",
 };
 
+
+
 export default function RootLayout({ children }) {
+  
   return (
     <html lang="en">
       <body className={rubik.className}>
@@ -20,6 +23,7 @@ export default function RootLayout({ children }) {
           <main>{children}</main>
           <Footer />
         </div>
+
       </body>
     </html>
   );

@@ -5,6 +5,7 @@ import { useState } from "react";
 import { login } from "../actions";
 
 const Login = () => {
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
@@ -64,6 +65,7 @@ const Login = () => {
             <div className="text-xl text-red-500 text-center">{error}</div>
           )}
         <form action="" onSubmit={handleSubmit}>
+
           <div className="mb-6">
             <label for="email" className="block mb-2">
               Email
@@ -79,6 +81,7 @@ const Login = () => {
             {errors.email && (
                 <p className="text-red-500 text-xs mt-1">{errors.email}</p>
               )}
+
           </div>
           <div className="mb-6">
             <label for="password" className="block mb-2">
@@ -95,6 +98,7 @@ const Login = () => {
             {errors.password && (
                 <p className="text-red-500 text-xs mt-1">{errors.password}</p>
               )}
+
           </div>
           <div className="mb-6">
             <button

@@ -143,5 +143,6 @@ export async function mostPopularBlog() {
         return blogs;
     } catch(err ) {
        throw new Error(err);
+
     }
 }

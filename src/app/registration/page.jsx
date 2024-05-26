@@ -100,6 +100,7 @@ const Registration = () => {
           </div>
           <div className="mb-6">
             <label htmlFor="email" className="block mb-2">
+
               Email
             </label>
             <input
@@ -116,12 +117,14 @@ const Registration = () => {
           </div>
           <div className="mb-6">
             <label htmlFor="password" className="block mb-2">
+
               Password
             </label>
             <input
               type="password"
               id="password"
               name="password"
+
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full p-3 bg-[#030317] border border-white/20 rounded-md focus:outline-none focus:border-indigo-500"
@@ -147,11 +150,13 @@ const Registration = () => {
                 {errors.confirmPassword}
               </p>
             )}
+
           </div>
           <div className="mb-6">
             <button
               type="submit"
               disabled={loading}
+
               className="w-full bg-indigo-600 text-white p-3 rounded-md hover:bg-indigo-700 transition-all duration-200"
             >
               Create Account
