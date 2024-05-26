@@ -1,17 +1,41 @@
-const CreateBlog = () => {
+import { submitBlog } from "@/app/actions";
+import { redirect } from "next/navigation";
+import { auth } from "../../../../auth";
+
+const CreateBlog = async () => {
+  const session = await auth();
+
+  if(!session) {
+    redirect('/login');
+  }
+
+  const handleSubmit = async (formData) => {
+    "use server";
+    const data = {
+      title : formData.get("title"),
+      content : formData.get("content"),
+      tags : formData.get("tags"),
+    }
+    const res = await submitBlog(data);
+
+    if(res) {
+      redirect('/blog');
+    }
+  }
+
   return (
     <section>
-      <div class="container">
-        <form action="#" method="POST" class="createBlog">
-          <div class="grid place-items-center bg-slate-600/20 h-[150px] rounded-md my-4">
-            <div class="flex items-center gap-4 hover:scale-110 transition-all cursor-pointer">
+      <div className="container">
+        <form action={handleSubmit} className="createBlog">
+          <div className="grid place-items-center bg-slate-600/20 h-[150px] rounded-md my-4">
+            <div className="flex items-center gap-4 hover:scale-110 transition-all cursor-pointer">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 24 24"
                 strokeWidth="1.5"
                 stroke="currentColor"
-                class="w-6 h-6"
+                className="w-6 h-6"
               >
                 <path
                   stroke-linecap="round"
@@ -22,39 +46,45 @@ const CreateBlog = () => {
               <p>Upload Your Image</p>
             </div>
           </div>
-          <div class="mb-6">
+          <div className="mb-6">
             <input
               type="text"
               id="title"
               name="title"
+              required
               placeholder="Enter your blog title"
+              className="border-2 border-red-500"
             />
           </div>
 
-          <div class="mb-6">
+          <div className="mb-6">
             <input
               type="text"
               id="tags"
               name="tags"
+              required
               placeholder="Your Comma Separated Tags Ex. JavaScript, React, Node, Express,"
             />
           </div>
 
-          <div class="mb-6">
+          <div className="mb-6">
             <textarea
               id="content"
               name="content"
+              required
               placeholder="Write your blog content"
               rows="8"
             ></textarea>
           </div>
 
-          <a
-            href="./createBlog.html"
-            class="bg-indigo-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-indigo-700 transition-all duration-200"
+          <div className="flex justify-end">
+          <button
+            type="submit"
+            className=" bg-indigo-600 text-white px-6 py-2 md:py-3 rounded-md hover:bg-indigo-700 transition-all duration-200"
           >
             Create Blog
-          </a>
+          </button>
+          </div>
         </form>
       </div>
     </section>

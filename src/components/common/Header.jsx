@@ -1,9 +1,12 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
+import { auth } from "../../../auth";
+import Logout from "./Logout";
 
-const BlogHeader = () => {
+const Header = async () => {
+  const session = await auth();
   return (
-    <header>
+    <header className="sticky top-0 ">
       <nav className="container mx-auto">
         <div>
           <Link href="/blog">
@@ -31,21 +34,31 @@ const BlogHeader = () => {
             </li>
             <li>
               <Link
-                href="/blog/login"
+                href="/blog"
+                className="flex items-center gap-2 cursor-pointer"
+              >
+                Blog
+              </Link>
+            </li>
+            
+            {session && session.user ? (<>
+              <Logout />
+            <li className="flex items-center">
+              <div className="avater-img bg-orange-600 text-white">
+                <span className="">{session.user.name[0]}</span>
+              </div>
+
+              <Link href="/profile">
+                <span className="text-white ml-2">{session.user.name}</span>
+              </Link>
+            </li></>) : (<li>
+              <Link
+                href="/login"
                 className="text-white/50 hover:text-white transition-all duration-200"
               >
                 Login
               </Link>
-            </li>
-            <li className="flex items-center">
-              <div className="avater-img bg-orange-600 text-white">
-                <span className="">S</span>
-              </div>
-
-              <Link href="/profile">
-                <span className="text-white ml-2">Saad Hasan</span>
-              </Link>
-            </li>
+            </li>)}
           </ul>
         </div>
       </nav>
@@ -53,4 +66,4 @@ const BlogHeader = () => {
   );
 };
 
-export default BlogHeader;
+export default Header;

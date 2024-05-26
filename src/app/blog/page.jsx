@@ -1,9 +1,11 @@
 import BlogList from "@/components/blog/BlogList";
 import FavouriteBlog from "@/components/blog/FavouriteBlog";
 import PopularBlog from "@/components/blog/PopularBlog";
+import { auth } from "../../../auth";
 
 /* eslint-disable @next/next/no-img-element */
-const Blog = () => {
+const Blog = async () => {
+  const session = await auth();
   return (
     <section>
       <div className="container mx-auto">
@@ -12,7 +14,7 @@ const Blog = () => {
 
           <div className="md:col-span-2 h-full w-full space-y-5">
             <PopularBlog />
-            <FavouriteBlog />
+            {session?.user && <FavouriteBlog />}
           </div>
         </div>
       </div>

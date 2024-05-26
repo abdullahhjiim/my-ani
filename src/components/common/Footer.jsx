@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import Link from "next/link";
 
-const BlogFooter = () => {
+const Footer = () => {
   return (
     <footer className="py-6 md:py-8 bg-[#030317]">
       <div className="container mx-auto flex items-center justify-between">
@@ -122,4 +122,4 @@ const BlogFooter = () => {
   );
 };
 
-export default BlogFooter;
+export default Footer;
