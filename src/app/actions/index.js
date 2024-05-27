@@ -3,6 +3,7 @@
 import { blogModel } from "@/models/blog-model";
 import { userModel } from "@/models/user-model";
 import { dbConnect } from "@/service/mongo";
+import fs from "node:fs/promises";
 import { auth, signIn } from "../../../auth";
 
 export async function login(data) {
@@ -77,11 +78,13 @@ export async function getProfileData(profileId) {
   }
 }
 
-
 export async function getBlogList(limit) {
   try {
     await dbConnect();
-    const blogs = blogModel.find({}).sort({"createdAt": -1}).limit(limit ?? 30);
+    const blogs = blogModel
+      .find({})
+      .sort({ createdAt: -1 })
+      .limit(limit ?? 30);
 
     return blogs;
   } catch (err) {
@@ -113,36 +116,58 @@ export async function submitBlog(data) {
 }
 
 export async function blogDetail(blogId) {
-    try {
-
-        await dbConnect();
-        const blog = blogModel.findOne({"_id" : blogId}).lean();
-        return blog;
-
-    } catch(err) {
-        throw new Error(err);
-    }
+  try {
+    await dbConnect();
+    const blog = blogModel.findOne({ _id: blogId }).lean();
+    return blog;
+  } catch (err) {
+    throw new Error(err);
+  }
 }
 
 export async function mostPopularBlog() {
-    try{
-        await dbConnect();
-        const blogs = await blogModel.aggregate([
-            {
-              $addFields: {
-                likesCount: { $size: '$likes' }
-              }
-            },
-            {
-              $sort: { likesCount: -1 }
-            },
-            {
-              $limit: 5 
-            }
-          ]);
-        return blogs;
-    } catch(err ) {
-       throw new Error(err);
+  try {
+    await dbConnect();
+    const blogs = await blogModel.aggregate([
+      {
+        $addFields: {
+          likesCount: { $size: "$likes" },
+        },
+      },
+      {
+        $sort: { likesCount: -1 },
+      },
+      {
+        $limit: 5,
+      },
+    ]);
+    return blogs;
+  } catch (err) {
+    throw new Error(err);
+  }
+}
 
+export async function uploadFile(formData, acceptFiles = [], fileDirectory = './public/uploads') {
+  try {
+
+    const session = await auth();
+
+    if(!session) {
+        return {status : 401, message : 'Unauthrized'};
     }
+
+    const file = formData.get("file");
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = new Uint8Array(arrayBuffer);
+
+    await fs.mkdir(fileDirectory, { recursive: true });
+    const filePath = `${fileDirectory}/${Date.now()}_${file.name}`;
+
+    await fs.writeFile(filePath, buffer);
+
+    return {status : 200, message : 'Success', filePath};
+
+  } catch (err) {
+    throw new Error(err);
+  }
 }
